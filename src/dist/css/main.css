@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Orbitron&display=swap");
+body {
+  background-color: #1e1e1e;
+}
+
+#clock-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#side-control-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+  margin: 15px;
+}
+#side-control-container #break-label,
+#side-control-container #session-label {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  color: #838383;
+}
+#side-control-container .chevron {
+  font-size: 35px;
+  color: #C6C6C6;
+}
+#side-control-container .chevron:hover {
+  cursor: pointer;
+}
+#side-control-container #break-length,
+#side-control-container #session-length {
+  margin-bottom: 9px;
+  color: white;
+  font-family: "Orbitron", sans-serif;
+  font-size: 2rem;
+}
+
+#main-display-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 15px;
+  padding: 20px 50px;
+  background-color: #303030;
+  border-radius: 20px;
+}
+#main-display-container #time-left {
+  color: white;
+  font-size: 4rem;
+  font-family: "Orbitron", sans-serif;
+}
+#main-display-container #timer-label {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  color: #8A8A8A;
+  letter-spacing: 6px;
+}
+
+#button-container {
+  position: absolute;
+  bottom: -12px;
+  display: flex;
+}
+#button-container .action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #AAAAAA;
+  border-radius: 14px;
+  margin: 5px;
+}
+#button-container .action-button span {
+  font-size: 46px;
+  color: #363535;
+}
+#button-container .action-button:nth-child(2) span {
+  font-size: 38px;
+}
+
+#button-container:hover {
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=main.css.map */
