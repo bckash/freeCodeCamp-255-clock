@@ -8,18 +8,28 @@ function SideControls (props) {
                 {props.head}
             </header>
 
-            <div id={props.idIncrement}>
-                <span className="material-symbols-outlined chevron">
+            <div>
+                <span 
+                    id={props.idIncrement} className="material-symbols-outlined chevron"
+                    onClick={props.handleLength}
+                >
                     expand_less
                 </span>
             </div>
 
             <div id={props.idLength}>
-                {props.length}
+                {
+                props.idLabel.includes("session") 
+                    ? props.state.sessionLength
+                    : props.state.breakLength
+                }
             </div>
 
-            <div id={props.idDecrement}>
-                <span className="material-symbols-outlined chevron">
+            <div>
+                <span 
+                    id={props.idDecrement}className="material-symbols-outlined chevron"
+                    onClick={props.handleLength}
+                >
                     expand_more
                 </span>
             </div>
