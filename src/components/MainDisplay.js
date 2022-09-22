@@ -1,11 +1,25 @@
 
 function MainDisplay (props) {
+
+    
+
+    let min; let sec;
+
+    if (props.state.displayTitle === "Session"){
+        min = props.state.minLength;
+        sec = props.state.secLength
+
+    } else {
+        min = props.state.minLengthBreak;
+        sec = props.state.secLengthBreak
+    }
+
     return (
         <section id="main-display-container">
             <div id="time-left">
-                {props.state.sessionLength < 10 
-                    ? "0"+ props.state.sessionLength
-                    : props.state.sessionLength}:00
+                {min < 10 ? "0"+ min : min}
+                        :
+                {sec < 10 ? "0"+ sec : sec}
             </div>
             <div id="timer-label">
                 {props.state.displayTitle}
