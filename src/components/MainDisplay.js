@@ -1,19 +1,10 @@
 
+
 function MainDisplay (props) {
 
+    let min = props.state.minutes;
+    let sec = props.state.seconds
     
-
-    let min; let sec;
-
-    if (props.state.displayTitle === "Session"){
-        min = props.state.minLength;
-        sec = props.state.secLength
-
-    } else {
-        min = props.state.minLengthBreak;
-        sec = props.state.secLengthBreak
-    }
-
     return (
         <section id="main-display-container">
             <div id="time-left">
@@ -23,7 +14,10 @@ function MainDisplay (props) {
             </div>
             <div id="timer-label">
                 {props.state.displayTitle}
-            </div>       
+            </div>
+            <audio id="beep">
+                <source src={props.sound} type="audio/mpeg"/>
+            </audio>
         </section>
     )
 }

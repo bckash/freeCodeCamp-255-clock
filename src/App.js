@@ -13,16 +13,11 @@ class App extends React.Component {
     this.state = {
       displayTitle: "Session",
       iconToggle: "play_arrow",
-      //side
-      sessionLength: 1,
-      breakLength: 2,
-      //main : session
-      minLength: 0,
-      secLength: 3,
-      //main : break
-      minLengthBreak: 2,
-      secLengthBreak: 0,
+      sessionLength: 25,
+      breakLength: 5,
 
+      minutes: 25,
+      seconds: 0,
       playOn: true
     }
     this.handlePlay = this.handlePlay.bind(this)
@@ -30,89 +25,52 @@ class App extends React.Component {
     this.handleRestart = this.handleRestart.bind(this)
   }
 
+
   // arrow functions don't provide their own this binding (it retains the this value of the enclosing lexical context). so this.interval point to the scope inside class - thats why its available for clearInterval()
   timer = () => {
-
-    //  if (this.state.displayTitle === "Break") {
-    //   this.interval = setInterval(() => {
-    //     this.setState( state => ({
-    //       secLengthBreak: state.secLengthBreak === 0
-    //         ? 59 
-    //         : --state.secLengthBreak,
-    //       minLengthBreak: state.secLengthBreak === 59
-    //         ? --state.minLengthBreak
-    //         : state.minLengthBreak,
-    //     }))    
-    //   }, 1000);
-
-
       this.interval = setInterval(() => {
-        //session
-        if (this.state.displayTitle === "Session") {
-
-          if (this.state.minLength === 0 && this.state.secLength === 0){
-            this.clearTimerInterval()
-            const audio = new Audio(sound)
-            audio.play()
-            audio.onended = () => {
-              console.log("ended")
-              this.interval = setInterval(() => {
-                // this.setState( state => ({
-                //   secLengthBreak: 0,
-                //   minLengthBreak: state.minLengthBreak,
-                //   displayTitle: "Break"
-                // })) 
-
-                if (this.state.secLengthBreak === 0) {
-                  this.setState( state => ({
-                    secLengthBreak: 59,
-                    minLengthBreak: --state.minLengthBreak,
-                    displayTitle: "Break"
-                  }))    
-        
-                } else {
-                  this.setState( state => ({
-                    secLengthBreak: --state.secLengthBreak
-                  }))  
-                }
-              }, 1000);
+        // bridge 
+        let seconds = this.state.seconds
+        let minutes = this.state.minutes
+        if (seconds===0 && minutes===0) {
+          console.log("hi")
+          this.clearTimerInterval()
+          const audio = document.getElementById("beep")
+          audio.play()
+          audio.onended = () => {            
+            if (this.state.displayTitle==="Session") {
+              this.setState( state => ({
+                seconds: 0,
+                minutes: state.breakLength,
+                displayTitle: "Break"
+              }))
+            } else {
+              this.setState( state => ({
+                seconds: 0,
+                minutes: state.sessionLength,
+                displayTitle: "Session"
+              }))
             }
-  
-          } else if (this.state.secLength === 0) {
-            this.setState( state => ({
-              secLength: 59,
-              minLength: --state.minLength
-            }))    
-  
-          } else {
-            this.setState( state => ({
-              secLength: --state.secLength
-            }))  
           }
-
-        // break
+        // default
         } else {
-
-          if (this.state.secLengthBreak === 0) {
+          if (seconds===0) {
             this.setState( state => ({
-              secLengthBreak: 59,
-              minLengthBreak: --state.minLengthBreak
-            }))    
-  
+              seconds: 59,
+              minutes: --state.minutes
+            }))
           } else {
             this.setState( state => ({
-              secLengthBreak: --state.secLengthBreak
-            }))  
+              seconds: --state.seconds,
+              minutes: state.minutes
+            }))
           }
         }
 
+
       }, 1000);
-
-
     }
 
-
-    
   clearTimerInterval = () => {
     clearInterval(this.interval)
   }
@@ -143,8 +101,10 @@ class App extends React.Component {
           breakLength: state.breakLength === 1
             ? 1
             : --state.breakLength,
-          minLengthBreak: state.breakLength,
-          secLengthBreak: 0
+          minutes: state.displayTitle==="Break"
+            ? state.breakLength : state.minutes,
+          seconds: state.displayTitle==="Break"
+          ? 0 : state.seconds,
         }))         
 
       } else if (tgtID.includes("increment")) {
@@ -152,8 +112,10 @@ class App extends React.Component {
           breakLength: state.breakLength === 60
             ? 60
             : ++state.breakLength,
-          minLengthBreak: state.breakLength,
-          secLengthBreak: 0
+          minutes: state.displayTitle==="Break"
+          ? state.breakLength : state.minutes,
+          seconds: state.displayTitle==="Break"
+          ? 0 : state.seconds,
         }))
       }
 
@@ -165,8 +127,10 @@ class App extends React.Component {
           sessionLength: state.sessionLength === 1
             ? 1
             : --state.sessionLength,
-          minLength: state.sessionLength,
-          secLength: 0
+          minutes: state.displayTitle==="Session"
+          ? state.sessionLength : state.minutes,
+          seconds: state.displayTitle==="Session"
+          ? 0 : state.seconds,
         }))         
 
       } else if (tgtID.includes("increment")) {
@@ -174,8 +138,10 @@ class App extends React.Component {
           sessionLength: state.sessionLength === 60
             ? 60
             : ++state.sessionLength,
-          minLength: state.sessionLength,
-          secLength: 0
+          minutes: state.displayTitle==="Session"
+          ? state.sessionLength : state.minutes,
+          seconds: state.displayTitle==="Session"
+          ? 0 : state.seconds,
         }))
       }
     }
@@ -185,33 +151,23 @@ class App extends React.Component {
 
     this.clearTimerInterval()
 
+    const audio = document.getElementById("beep")
+    audio.pause()
+    audio.load()
+
     this.setState( state => ({
       iconToggle: "play_arrow",
-      minLength: 25,
-      secLength: 0,
+      minutes: state.displayTitle==="Session"
+        ? state.sessionLength : state.breakLength,
+      seconds: 0,
       playOn: true
     }))
   }
 
   componentDidUpdate(prevProps, prevState){
-    if (prevState.secLength !== this.state.secLength){
-
-
-      //  if (this.state.displayTitle === "Break") {
-      //   this.setState( state => ({
-      //   minLengthBreak: state.secLengthBreak === 59
-      //   ? --state.minLengthBreak
-      //   : state.minLengthBreak,
-      //   }))
-
-        
-          // this.setState( state => ({
-          //   minLength: state.secLength === 59
-          //     ? --state.minLength
-          //     : state.minLength
-          // })) 
+    if (prevState.displayTitle !== this.state.displayTitle){
+        this.timer()
         }
-
     }
 
 
@@ -229,6 +185,7 @@ class App extends React.Component {
         />
         <MainDisplay
           state={this.state}
+          sound={sound}
         />
         <SideControls 
           head={"Session Length"} 
