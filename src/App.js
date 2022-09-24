@@ -25,7 +25,6 @@ class App extends React.Component {
     this.handleRestart = this.handleRestart.bind(this)
   }
 
-
   // arrow functions don't provide their own this binding (it retains the this value of the enclosing lexical context). so this.interval point to the scope inside class - thats why its available for clearInterval()
   timer = () => {
       this.interval = setInterval(() => {
@@ -33,11 +32,9 @@ class App extends React.Component {
         let seconds = this.state.seconds
         let minutes = this.state.minutes
         if (seconds===0 && minutes===0) {
-          console.log("hi")
           this.clearTimerInterval()
           const audio = document.getElementById("beep")
           audio.play()
-          audio.onended = () => {            
             if (this.state.displayTitle==="Session") {
               this.setState( state => ({
                 seconds: 0,
@@ -51,7 +48,7 @@ class App extends React.Component {
                 displayTitle: "Session"
               }))
             }
-          }
+            this.timer()
         // default
         } else {
           if (seconds===0) {
@@ -77,12 +74,12 @@ class App extends React.Component {
 
   handlePlay(){
     
-      this.setState({
-        iconToggle: this.state.iconToggle === "play_arrow" 
+      this.setState( state => ({
+        iconToggle: state.iconToggle === "play_arrow" 
           ? "pause" : "play_arrow",
-        playOn: this.state.playOn === false 
+        playOn: state.playOn === false 
           ? true : false
-      })
+      }))
 
         this.state.playOn 
           ? this.timer() 
@@ -155,21 +152,16 @@ class App extends React.Component {
     audio.pause()
     audio.load()
 
-    this.setState( state => ({
+    this.setState({
       iconToggle: "play_arrow",
-      minutes: state.displayTitle==="Session"
-        ? state.sessionLength : state.breakLength,
+      minutes: 25,
       seconds: 0,
-      playOn: true
-    }))
+      playOn: true,
+      displayTitle: "Session",
+      breakLength: 5,
+      sessionLength: 25
+    })
   }
-
-  componentDidUpdate(prevProps, prevState){
-    if (prevState.displayTitle !== this.state.displayTitle){
-        this.timer()
-        }
-    }
-
 
   render(){
     return(
@@ -210,7 +202,6 @@ class App extends React.Component {
       </article>
     )
   }
-
 }
 
 export default App;
